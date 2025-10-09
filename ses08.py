@@ -21,10 +21,10 @@ def lecture_graph():
     [2, 2, 2, 1, 0]
     """
     distances = {
-        'a': {},
+        'a': {'b': 1, 'c': 5},
         'b': {'c': 2, 'd': 5},
-        'c': {},
-        'd': {},
+        'c': {'d': 2, 'e': 6},
+        'd': {'e': 2},
         'e': {}
     }
     return distances
@@ -64,7 +64,8 @@ def dijkstra(graph, start):
     X.add(start)
     
     # Previous nodes
-    prev_nodes = ...
+    prev_nodes = {}
+    prev_nodes[start] = None
     
     # Shortest distances to all nodes from s
     A = dict() 
@@ -92,11 +93,18 @@ def dijkstra(graph, start):
                         min_dist = A[src] + weight 
         # Update A[min_e_dest] = A[min_e_source] + A[min_e_weight]        
         A[min_edge[1]] = A[min_edge[0]] + min_edge[2]
+
+        prev_nodes[min_edge[1]] = min_edge[0]
         
         # Add destination node from min edge to visited nodes
         X.add(min_edge[1])  
     
-    return A
+    return A, prev_nodes
+
+graph = gs.Digraph(lecture_graph())
+dists, prev_nodes = dijkstra(graph, 'a')
+[dists['b'], dists['e'], dists['c'], dists['d']]
+
 
 
 def print_path(prev_nodes, v):
